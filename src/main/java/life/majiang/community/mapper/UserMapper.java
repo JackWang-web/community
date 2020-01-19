@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface UserMapper {
-    @Insert("insert into COMMUNITY.USER (name,account_id,token,gmt_create,gmt_modified) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
+    @Insert("insert into USER (name,account_id,token,gmt_create,gmt_modified) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
     void insert(User user);
 
-    @Select("select * from COMMUNITY.USER where token = #{token}")
+    @Select("select * from USER where token = #{token}")
     User findByToken(@Param("token") String token);
 }
