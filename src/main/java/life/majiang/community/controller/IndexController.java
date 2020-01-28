@@ -10,22 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class IndexController {
-    @Autowired
+    @Autowired(required=true)
     private UserMapper userMapper;
 
-    @Autowired
+    @Autowired(required=true)
     private QuestionService questionService;
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
-                        Model model){
+                        Model model,
+                        @RequestParam(name = "page",defaultValue = "1") Integer page,
+                        @RequestParam(name = "size",defaultValue = "5") Integer size){
         Cookie[] cookies = request.getCookies();
         if(cookies != null && cookies.length != 0)
         for (Cookie cookie : cookies) {
@@ -39,9 +43,17 @@ public class IndexController {
             }
         }
 
-        List<QuestionDTO> questionList = questionService.list();
+        List<QuestionDTO> questionList = questionService.list(page, size);
 
-        model.addAttribute("questions",questionList);
+
+        for (QuestionDTO questionDTO : questionList) {
+            model.addAttribute("navigatepageNums",questionDTO.getNavigatepageNums());
+            model.addAttribute("PageNum",questionDTO.getPageNum());
+            model.addAttribute("hasPreviousPage",questionDTO.getHasPreviousPage());
+            model.addAttribute("hasNextPage",questionDTO.getHasNextPage());
+            model.addAttribute("pages",questionDTO.getPages());
+        }
+        model.addAttribute("questionList",questionList);
         return "index";
     }
 }
