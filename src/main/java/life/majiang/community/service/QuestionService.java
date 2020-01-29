@@ -76,4 +76,32 @@ public class QuestionService {
     }
 
 
+    public List<QuestionDTO> listById(Integer userId, Integer page, Integer size) {
+        PageHelper.startPage(page,size);
+        List<Question> questions = questionMapper.listById(userId);
+        List<QuestionDTO> profileDTOList = new ArrayList<>();
+        PageInfo<Question> profilePageInfo = new PageInfo<>(questions,5);
+
+        for (Question question : questions) {
+            User user = userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question,questionDTO);
+            questionDTO.setUser(user);
+
+            questionDTO.setNavigatepageNums(profilePageInfo.getNavigatepageNums());
+            questionDTO.setPageNum(profilePageInfo.getPageNum());
+            questionDTO.setPageSize(profilePageInfo.getPageSize());
+            questionDTO.setPages(profilePageInfo.getPages());
+            questionDTO.setHasPreviousPage(profilePageInfo.isHasPreviousPage());
+            questionDTO.setHasNextPage(profilePageInfo.isHasNextPage());
+            profileDTOList.add(questionDTO);
+            System.out.println(profileDTOList);
+
+        }
+
+
+        return profileDTOList;
+    }
+
+
 }
