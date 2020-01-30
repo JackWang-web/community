@@ -6,6 +6,7 @@ import life.majiang.community.dto.GithubUser;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.User;
 import life.majiang.community.provider.GithubProvider;
+import life.majiang.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
@@ -33,7 +34,7 @@ public class AuthorizeController {
     private String redirectUri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
 
     @GetMapping("/callback")
@@ -60,14 +61,24 @@ public class AuthorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            userMapper.insert(user);
-            //登录成功 写cookie和session
-           // request.getSession().setAttribute("githubUser", githubUser);
-            response.addCookie(new Cookie("token",token));
+            userService.createOrUpdate(user);
+            Cookie cookie = new Cookie("token", token);
+            cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
+            response.addCookie(cookie);
             return "redirect:/";
         }else{
             //登录失败
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);//立马失效
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
