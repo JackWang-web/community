@@ -9,6 +9,7 @@ import life.majiang.community.dto.QuestionDTO;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
+import life.majiang.community.model.QuestionExample;
 import life.majiang.community.model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +30,12 @@ public class QuestionService {
 
     public List<QuestionDTO> list(Integer page, Integer size) {
         PageHelper.startPage(page,size);
-        List<Question> questions = questionMapper.list();
+        List<Question> questions = questionMapper.selectByExample(new QuestionExample());
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         PageInfo<Question> questionPageInfo = new PageInfo<>(questions,5);
 
-
-
-        System.out.println("导航栏："+ Arrays.toString(questionPageInfo.getNavigatepageNums()));
-        System.out.println("当前页码："+questionPageInfo.getPageNum());
-        System.out.println("每页几条："+questionPageInfo.getPageSize());
-        System.out.println("总页数："+questionPageInfo.getPages());
-        System.out.println("有没有上一页："+questionPageInfo.isHasPreviousPage());
-        System.out.println("有没有下一页："+questionPageInfo.isHasNextPage());
         for (Question question : questions) {
-            User user = userMapper.findById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
             questionDTO.setUser(user);
@@ -78,12 +71,16 @@ public class QuestionService {
 
     public List<QuestionDTO> listById(Integer userId, Integer page, Integer size) {
         PageHelper.startPage(page,size);
-        List<Question> questions = questionMapper.listById(userId);
+        QuestionExample example = new QuestionExample();
+        example.createCriteria()
+                .andIdEqualTo(userId);
+        questionMapper.selectByExample(example);
+        List<Question> questions = questionMapper.selectByExample(example);
         List<QuestionDTO> profileDTOList = new ArrayList<>();
         PageInfo<Question> profilePageInfo = new PageInfo<>(questions,5);
 
         for (Question question : questions) {
-            User user = userMapper.findById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
             questionDTO.setUser(user);
@@ -105,8 +102,8 @@ public class QuestionService {
 
 
     public QuestionDTO getById(Integer id) {
-        Question question = questionMapper.getById(id);
-        User user = userMapper.findById(question.getCreator());
+        Question question = questionMapper.selectByPrimaryKey(id);
+        User user = userMapper.selectByPrimaryKey(question.getCreator());
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         questionDTO.setUser(user);
@@ -119,11 +116,20 @@ public class QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
+            questionMapper.insert(question);
         }else{
             //更新
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.update(question);
+            Question updateQuestion = new Question();
+            updateQuestion.setGmtModified(System.currentTimeMillis());
+            updateQuestion.setTitle(question.getTitle());
+            updateQuestion.setDescription(question.getDescription());
+            updateQuestion.setTag(question.getTag());
+
+            QuestionExample example = new QuestionExample();
+            example.createCriteria()
+                    .andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(updateQuestion, example);
         }
     }
 }
