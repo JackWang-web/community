@@ -12,13 +12,13 @@ import java.util.List;
 //这是传输层，将问题类与用户类建立联系
 @Data
 public class QuestionDTO<T> {
-    private Integer id;
+    private Long id;
     private String title;
     private String description;
     private String tag;
     private Long gmtCreate;
     private Long gmtModified;
-    private Integer creator;
+    private Long creator;
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
