@@ -12,6 +12,16 @@
 
 
 </head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closzble = window.localStorage.getItem("closable");
+        if(closzble=="true"){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+
+    }
+</script>
 <body>
 <!--<p th:text="'Hello, ' + ${name} + '!'" />-->
 <div th:replace="navigation :: nav"></div>

@@ -13,6 +13,15 @@ function post() {
         success:function (response) {
            if (response.code == 200){
                $("#comment_section").hide();
+           }else{
+               if (response.code == 2003){
+                   var isAccepted = confirm(response.message);
+                   if (isAccepted){
+                       window.open("https://github.com/login/oauth/authorize?client_id=1001569a21ac06d0b229&redirect_uri=http://localhost/callback&scope=user&state=1");
+                       window.localStorage.setItem("closable",true);
+                   }
+               }
+               alert(response.message);
            }
         },
         dataType:"json"
