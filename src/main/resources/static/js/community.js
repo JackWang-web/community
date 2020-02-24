@@ -7,7 +7,7 @@ function post() {
     comment2target(questionId, 1, content);
 }
 
-function comment2target(targetId, type, content) {
+function comment2target(targetId, commentType, content) {
     if (!content) {
         alert("不能回复空内容~~~");
         return;
@@ -20,7 +20,7 @@ function comment2target(targetId, type, content) {
         data: JSON.stringify({
             "parentId": targetId,
             "content": content,
-            "type": type
+            "type": commentType
         }),
         success: function (response) {
             if (response.code == 200) {
