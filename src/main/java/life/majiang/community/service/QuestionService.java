@@ -85,7 +85,7 @@ public class QuestionService {
         PageHelper.startPage(page,size);
         QuestionExample example = new QuestionExample();
         example.createCriteria()
-                .andIdEqualTo(userId);
+                .andCreatorEqualTo(userId);
         questionMapper.selectByExample(example);
         List<Question> questions = questionMapper.selectByExample(example);
         List<QuestionDTO> profileDTOList = new ArrayList<>();
