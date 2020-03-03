@@ -104,7 +104,7 @@ public class QuestionService {
             questionDTO.setHasPreviousPage(profilePageInfo.isHasPreviousPage());
             questionDTO.setHasNextPage(profilePageInfo.isHasNextPage());
             profileDTOList.add(questionDTO);
-            System.out.println(profileDTOList);
+
 
         }
 
