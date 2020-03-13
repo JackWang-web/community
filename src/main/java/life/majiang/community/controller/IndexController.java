@@ -19,9 +19,10 @@ public class IndexController {
     public String index(
                         Model model,
                         @RequestParam(name = "page",defaultValue = "1") Integer page,
-                        @RequestParam(name = "size",defaultValue = "5") Integer size){
+                        @RequestParam(name = "size",defaultValue = "5") Integer size,
+                        @RequestParam(name = "search",required = false) String search){
 
-        List<QuestionDTO> questionList = questionService.list(page, size);
+        List<QuestionDTO> questionList = questionService.list(search ,page, size);
 
 
         for (QuestionDTO questionDTO : questionList) {
@@ -32,6 +33,7 @@ public class IndexController {
             model.addAttribute("pages",questionDTO.getPages());
         }
         model.addAttribute("questionList",questionList);
+        model.addAttribute("search",search);
         return "index";
     }
 }

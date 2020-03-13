@@ -1,5 +1,6 @@
 package life.majiang.community.mapper;
 
+import life.majiang.community.dto.QuestionQueryDTO;
 import life.majiang.community.model.Question;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +12,6 @@ public interface QuestionExtMapper {
     int incCommentCount(Question record);
     List<Question> selectRelated(Question question);
 
-
+    //搜索查询
+    List<Question> selectBySearch(QuestionQueryDTO questionQueryDTO);
 }

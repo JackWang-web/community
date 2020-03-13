@@ -57,12 +57,12 @@
                 <ul class="pagination">
 
                     <li >
-                        <a th:href="@{/(page=1)}" aria-label="Previous">
+                        <a th:href="@{/(page=1,search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
                     <li th:if="${hasPreviousPage}">
-                        <a th:href="@{/(page=${PageNum - 1})}"
+                        <a th:href="@{/(page=${PageNum - 1},search=${search})}"
                            aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
@@ -70,11 +70,11 @@
 
                     <li th:each="page : ${navigatepageNums}" th:class="${PageNum == page}? 'active' : ''" >
 
-                        <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+                        <a th:href="@{/(page=${page},search=${search})}" th:text="${page}"></a>
 
                     </li>
                     <li th:if="${hasNextPage}">
-                        <a th:href="@{/(page=${PageNum + 1})}"
+                        <a th:href="@{/(page=${PageNum + 1},search=${search})}"
                            aria-label="Previous">
                             <span aria-hidden="true">&gt;</span>
                         </a>
@@ -85,7 +85,7 @@
 
 
                     <li >
-                        <a th:href="@{/(page=${pages})}" aria-label="Previous">
+                        <a th:href="@{/(page=${pages},search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">>></span>
                         </a>
                     </li>

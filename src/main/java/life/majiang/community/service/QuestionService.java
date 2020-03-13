@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import life.majiang.community.dto.CommentDTO;
 import life.majiang.community.dto.QuestionDTO;
+import life.majiang.community.dto.QuestionQueryDTO;
 import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
@@ -38,11 +39,26 @@ public class QuestionService {
     @Autowired
     private CommentMapper commentMapper;
 
-    public List<QuestionDTO> list(Integer page, Integer size) {
+    public List<QuestionDTO> list(String search,Integer page, Integer size) {
+        if (StringUtils.isNotBlank(search)) {
+            String[] tags = StringUtils.split(search, " ");
+            search= Arrays.stream(tags).collect(Collectors.joining("|"));
+
+        }
         PageHelper.startPage(page,size);
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExample(questionExample);
+        List<Question> questions;
+        if (search == null) {
+             questions = questionMapper.selectByExample(questionExample);
+        }else {
+            //搜索问题
+            QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+            questionQueryDTO.setSearch(search);
+            questionQueryDTO.setPage(page);
+            questionQueryDTO.setSize(size);
+            questions = questionExtMapper.selectBySearch(questionQueryDTO);
+        }
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         PageInfo<Question> questionPageInfo = new PageInfo<>(questions,5);
 
