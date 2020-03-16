@@ -57,8 +57,9 @@
                 <div class="form-group">
                     <label for="tag">添加标签:</label>
                     <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}"
-                           placeholder="输入标签，以，号分隔"
+                           placeholder="请点击此输入框选择问题标签..."
                             onclick="showSelectTag()"
+                           readonly
                     >
                     <div id="select-tag" class="publish-tag-tab">
                         <ul class="nav nav-tabs" role="tablist">
