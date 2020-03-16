@@ -46,19 +46,14 @@ public class QuestionService {
 
         }
         PageHelper.startPage(page,size);
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions;
-        if (search == null) {
-             questions = questionMapper.selectByExample(questionExample);
-        }else {
+
             //搜索问题
             QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
             questionQueryDTO.setSearch(search);
             questionQueryDTO.setPage(page);
             questionQueryDTO.setSize(size);
-            questions = questionExtMapper.selectBySearch(questionQueryDTO);
-        }
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
+
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         PageInfo<Question> questionPageInfo = new PageInfo<>(questions,5);
 

@@ -30,7 +30,7 @@
         *
         from QUESTION where id !=#{id} and tag regexp #{tag}
     </select>
-
+<!--查询 按时间顺序排序，动态拼接搜索，-->
     <select id="selectBySearch" parameterType="life.majiang.community.dto.QuestionQueryDTO" resultMap="BaseResultMap">
         select
         *
@@ -40,6 +40,7 @@
                 and title regexp #{search}
             </if>
         </where>
+        order by gmt_create desc
     </select>
 
 </mapper>
