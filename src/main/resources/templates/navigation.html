@@ -31,6 +31,9 @@
                     <li class="dropdown" th:if="${session.user != null}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true" aria-expanded="false" >
+                            <img class="head-img img-circle"
+                                 th:src="${session.user.avatarUrl}"
+                                 alt="...">
                             <span th:text="${session.user.getName()}"></span>
                             <span class="caret"></span>
                         </a>
@@ -58,9 +61,7 @@
         </div><!-- /.container-fluid -->
     </nav>
 </div>
-<div th:fragment="foot" class="footer">
-    <div>Copyright © 2020  ICP备000000号 ·  All Rights Reserved Powered By <a href="http://www.wangrui.icu" target="_blank"> 锐慕银 </a></div>
-</div>
+
 </body>
 
 </html>
