@@ -1,11 +1,11 @@
 create table notification
 (
-	id BIGINT auto_increment,
-	notifier BIGINT not null,
-	receiver BIGINT not null,
-	outerId BIGINT not null,
+	id bigint auto_increment,
+	notifier bigint not null,
+	receiver bigint not null,
+	outerid bigint not null,
 	type int not null,
-	gmt_create Bigint not null,
+	gmt_create bigint not null,
 	status int default 0 not null,
 	constraint notification_pk
 		primary key (id)
