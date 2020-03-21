@@ -29,7 +29,7 @@ function comment2target(targetId, commentType, content) {
                 if (response.code == 2003) {
                     var isAccepted = confirm(response.message);
                     if (isAccepted) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=e56854f54d500b4f60f8&redirect_uri=http://localhost/callback&scope=user&state=1");
+                        window.open("https://github.com/login/oauth/authorize?response_type=code&client_id=101857679&redirect_uri=http://www.wangrui.icu/callbackQQ&state=qqlogin");
                         window.localStorage.setItem("closable", true);
                     }
                 } else {
