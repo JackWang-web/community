@@ -70,7 +70,7 @@ public class QuestionService {
             questionDTO.setHasPreviousPage(questionPageInfo.isHasPreviousPage());
             questionDTO.setHasNextPage(questionPageInfo.isHasNextPage());
             questionDTOList.add(questionDTO);
-            System.out.println(questionDTOList);
+
 
         }
 /*
