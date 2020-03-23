@@ -2,7 +2,8 @@ package life.majiang.community.controller;
 
 import life.majiang.community.cache.TagCache;
 import life.majiang.community.dto.QuestionDTO;
-import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.exception.CustomizeErrorCode;
+import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.model.Question;
 import life.majiang.community.model.User;
 import life.majiang.community.service.QuestionService;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class PublishController {
@@ -25,13 +25,22 @@ public class PublishController {
 
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id")Long id,
-                       Model model){
+                       Model model,
+                       HttpServletRequest request){
+        if (id!=null) {
+            User user = (User) request.getSession().getAttribute("user");
+            QuestionDTO byId = questionService.getById(id);
+            if (byId.getCreator() != user.getId()) {
+                throw new CustomizeException(CustomizeErrorCode.INVALID_OPERATION);
+            }
+        }
         QuestionDTO question = questionService.getById(id);
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
         model.addAttribute("id",question.getId());
         model.addAttribute("tags", TagCache.get());
+
         return "publish";
     }
 
@@ -49,6 +58,7 @@ public class PublishController {
             @RequestParam(value ="id",required = false) Long id,
             HttpServletRequest request,
             Model model){
+
         model.addAttribute("title",title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);
@@ -77,13 +87,23 @@ public class PublishController {
             model.addAttribute("error","用户未登录");
             return "publish";
         }
+
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setCreator(user.getId());
+        if(id==null) {
+            question.setCreator(user.getId());
+        }else{
+            QuestionDTO byId = questionService.getById(id);
+            if (byId.getCreator()!=user.getId()){
+                throw  new CustomizeException(CustomizeErrorCode.INVALID_OPERATION);
+            }
+            question.setCreator(byId.getCreator());
+        }
         question.setId(id);
         questionService.createOrUpdate(question);
+
         return "redirect:/";
     }
 }

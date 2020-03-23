@@ -5,10 +5,8 @@ package life.majiang.community.service;
 */
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import life.majiang.community.dto.CommentDTO;
 import life.majiang.community.dto.QuestionDTO;
 import life.majiang.community.dto.QuestionQueryDTO;
-import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.CommentMapper;
@@ -21,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +38,7 @@ public class QuestionService {
     @Autowired
     private CommentMapper commentMapper;
 
-    public List<QuestionDTO> list(String search,Integer page, Integer size) {
+    public List<QuestionDTO> list(String search, String tag, Integer page, Integer size) {
         if (StringUtils.isNotBlank(search)) {
             String[] tags = StringUtils.split(search, " ");
             search= Arrays.stream(tags).collect(Collectors.joining("|"));
@@ -50,6 +49,7 @@ public class QuestionService {
             //搜索问题
             QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
             questionQueryDTO.setSearch(search);
+            questionQueryDTO.setTag(tag);
             questionQueryDTO.setPage(page);
             questionQueryDTO.setSize(size);
         List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
@@ -148,13 +148,14 @@ public class QuestionService {
             questionMapper.insert(question);
         }else{
             //更新
+
             question.setGmtModified(System.currentTimeMillis());
             Question updateQuestion = new Question();
             updateQuestion.setGmtModified(System.currentTimeMillis());
             updateQuestion.setTitle(question.getTitle());
             updateQuestion.setDescription(question.getDescription());
             updateQuestion.setTag(question.getTag());
-
+            //更新的时候，需要对比问题的id和更新者的id
 
             QuestionExample example = new QuestionExample();
             example.createCriteria()
@@ -163,6 +164,8 @@ public class QuestionService {
             if (i != 1) {
                 throw  new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
+
+
         }
     }
 

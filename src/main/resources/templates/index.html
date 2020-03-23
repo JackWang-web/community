@@ -57,12 +57,12 @@
                 <ul class="pagination">
 
                     <li >
-                        <a th:href="@{/(page=1,search=${search})}" aria-label="Previous">
+                        <a th:href="@{/(page=1,search=${search},tag=${tag})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
                     <li th:if="${hasPreviousPage}">
-                        <a th:href="@{/(page=${PageNum - 1},search=${search})}"
+                        <a th:href="@{/(page=${PageNum - 1},search=${search},tag=${tag})}"
                            aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
@@ -70,11 +70,11 @@
 
                     <li th:each="page : ${navigatepageNums}" th:class="${PageNum == page}? 'active' : ''" >
 
-                        <a th:href="@{/(page=${page},search=${search})}" th:text="${page}"></a>
+                        <a th:href="@{/(page=${page},search=${search},tag=${tag})}" th:text="${page}"></a>
 
                     </li>
                     <li th:if="${hasNextPage}">
-                        <a th:href="@{/(page=${PageNum + 1},search=${search})}"
+                        <a th:href="@{/(page=${PageNum + 1},search=${search},tag=${tag})}"
                            aria-label="Previous">
                             <span aria-hidden="true">&gt;</span>
                         </a>
@@ -85,7 +85,7 @@
 
 
                     <li >
-                        <a th:href="@{/(page=${pages},search=${search})}" aria-label="Previous">
+                        <a th:href="@{/(page=${pages},search=${search},tag=${tag})}" aria-label="Previous">
                             <span aria-hidden="true">>></span>
                         </a>
                     </li>
@@ -94,12 +94,17 @@
         </div>
 
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>热门话题</h3>
+           <!-- <h3>热门话题</h3>
             开发中...
-            <!-- 微信号-->
+            &lt;!&ndash; 微信号&ndash;&gt;
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=260474420&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:260474420:53" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
-            </div>
+            </div>-->
+            <h4>热门标签</h4>
+            <div class="hot-tag">
+                <span th:each="tag:${tags}" >
+                    <a class="community-tag a-nobr" th:href="@{/(page=1,search=${search},tag=${tag})}" th:text="${tag}"></a>
+                </span>
         </div>
     </div>
 </div>
