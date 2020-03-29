@@ -29,7 +29,7 @@ public class HotTagTasks {
     private HotTagCache hotTagCache;
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-    @Scheduled(fixedRate = 50000)
+    @Scheduled(fixedRate = 1000*60*60*4)
     //@Scheduled(cron = "0 0 1 * * *")//每天凌晨1点执行
 
     public void hotTagSchedule() {
@@ -52,18 +52,18 @@ public class HotTagTasks {
                         priorities.put(tag,5+questionDTO.getCommentCount());
                     }
                 }
-                log.info("list question :{}",questionDTO.getId());
+                //log.info("list question :{}",questionDTO.getTag());
             }
             offset +=limit;
         }
-/*        priorities.forEach(
+        priorities.forEach(
                 (k,v) -> {
                     System.out.print(k);
                     System.out.print(":");
                     System.out.print(v);
                     System.out.println();
                 }
-        );*/
+        );
         hotTagCache.updateTags(priorities);
         log.info("hotTagSchedule stop {}", dateFormat.format(new Date()));
     }

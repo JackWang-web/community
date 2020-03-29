@@ -79,6 +79,7 @@ body {
 
 .comment {
     margin: 10px 0;
+    width: 690px
 }
 
 
@@ -148,6 +149,9 @@ body {
 }
 /*头像*/
 .head-img{
-    width: 23px
+    width: 23px;
 }
-
+/*将未解码的表情内容隐藏*/
+.displayContent{
+    display:none;
+}

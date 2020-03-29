@@ -15,6 +15,12 @@
     <script src="/js/editormd.min.js"></script>
     <script src="/js/lib/marked.min.js"></script>
     <script src="/js/lib/prettify.min.js"></script>
+<!--网页标题加图标-->
+    <link rel="shortcut icon" href="/public/image/bitbug_favicon.ico">
+    <!--表情包-->
+
+    <link rel="stylesheet" type="text/css" href="/public/style/emoticons.css">
+    <script type="text/javascript" src="/js/jquery.emoticons.js"></script>
 
 </head>
 <body>
@@ -41,6 +47,7 @@
                 <script type="text/javascript">
                     $(function() {
                         editormd.markdownToHTML("question-markdown-view", { });
+
                     });
                 </script>
                 <!--标签-->
@@ -77,11 +84,34 @@
                                      th:src="${comment.user.avatarUrl}">
                             </a>
                         </div>
+
                         <div class="media-body" th:id="${'comment-body-'+comment.id}">
                             <h5 class="media-heading">
                                 <span th:text="${comment.user.name}"></span>
                             </h5>
-                            <div th:text="${comment.content}"></div>
+
+                             <div th:text="${comment.content}" name="formatContent" th:id="${'content-'+comment.id}" class="displayContent"></div>
+
+                            <div th:id="${'result-'+comment.id}" class="result"></div>
+                            <script>
+
+                                $.emoticons({
+                                    'activeCls':'trigger-active'
+                                },function(api){
+
+                                    var $content1 = $('div[name=formatContent]');
+                                    for (var i = 0; i <$content1.length ; i++) {
+                                        var result = 'result-'+'[[${comment.id}]]';//获取model里评论的id
+                                        var content = 'content-'+'[[${comment.id}]]';
+                                        var $1 = $('#'+result);
+                                        var $2 = $('#'+content);
+                                        $1.html(api.format($2.text()));
+                                    }
+                                });
+                            </script>
+
+
+
                             <div class="menu">
                                 <span class="glyphicon glyphicon-thumbs-up icon"></span>
                                 <span th:data-id="${comment.id}"
@@ -97,8 +127,10 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments"
                                  th:id="${'comment-'+comment.id}">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
                                     <input type="text" class="form-control" placeholder="评论一下……"
                                            th:id="${'input-'+comment.id}">
+
                                     <button type="button" class="btn btn-success pull-right" onclick="comment(this)"
                                             th:data-id="${comment.id}">评论
                                     </button>
@@ -133,8 +165,15 @@
                         </div>
                     </div>
                     <input type="hidden" id="question_id" th:value="${question.id}">
-                    <textarea class="form-control comment" id="comment_content" rows="6"></textarea>
-                    <button type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>
+
+                    <div class="emoticons">
+                        <div class="publisher">
+                            <textarea class="form-control comment" id="comment_content" name="content" rows="6"></textarea>
+                            <a><span class="trigger" href="javascript:;">☺选择表情</span></a>
+                            <button type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
