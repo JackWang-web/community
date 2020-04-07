@@ -39,9 +39,10 @@ public class TagCache {
         tagDTOS.add(tool);
 
         TagDTO other = new TagDTO();
-        tool.setCategoryName("其他");
-        tool.setTags(Arrays.asList("测试","生活"));
+        other.setCategoryName("其他");
+        other.setTags(Arrays.asList("测试","生活"));
         tagDTOS.add(other);
+
         return tagDTOS;
     }
 

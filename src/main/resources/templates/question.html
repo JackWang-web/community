@@ -89,7 +89,7 @@
                             <h5 class="media-heading">
                                 <span th:text="${comment.user.name}"></span>
                             </h5>
-
+                                                            <!-displayContent未解析的内容不展示--->
                              <div th:text="${comment.content}" name="formatContent" th:id="${'content-'+comment.id}" class="displayContent"></div>
 
                             <div th:id="${'result-'+comment.id}" class="result"></div>
@@ -98,8 +98,8 @@
                                 $.emoticons({
                                     'activeCls':'trigger-active'
                                 },function(api){
-
                                     var $content1 = $('div[name=formatContent]');
+                                    //解析每一条回复类容中的表情
                                     for (var i = 0; i <$content1.length ; i++) {
                                         var result = 'result-'+'[[${comment.id}]]';//获取model里评论的id
                                         var content = 'content-'+'[[${comment.id}]]';
@@ -172,6 +172,12 @@
                             <a><span class="trigger" href="javascript:;">☺选择表情</span></a>
                             <button type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>
                         </div>
+                        <script>
+
+                            $.emoticons({
+                                'activeCls':'trigger-active'
+                            });
+                        </script>
 
                     </div>
                 </div>

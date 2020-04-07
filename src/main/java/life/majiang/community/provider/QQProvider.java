@@ -3,24 +3,25 @@ package life.majiang.community.provider;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import life.majiang.community.dto.QQUser;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
 @Slf4j
+@Data
+@ConfigurationProperties(prefix = "qq")
 public class QQProvider {
-    @Value("${qq.client.id}")
     private String qqClientId;
-    @Value("${qq.client.secret}")
     private String qqClientSecret;
-    @Value("${qq.redirect.uri}")
-    private String qqRedirectUri;
+    private String qqRedirectUrl;
 
     private OkHttpClient client = new OkHttpClient();
 
@@ -28,7 +29,7 @@ public class QQProvider {
      * 获取AccessToken
      */
     public String getAccessToken(String code) {
-        String url = "https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id="+qqClientId+"&client_secret="+qqClientSecret+"&code="+code+"&redirect_uri="+qqRedirectUri;
+        String url = "https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id="+qqClientId+"&client_secret="+qqClientSecret+"&code="+code+"&redirect_uri="+qqRedirectUrl;
         Request request = new Request.Builder()
                 .url(url)
                 .build();

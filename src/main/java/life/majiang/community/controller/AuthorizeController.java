@@ -7,9 +7,10 @@ import life.majiang.community.model.User;
 import life.majiang.community.provider.GithubProvider;
 import life.majiang.community.provider.QQProvider;
 import life.majiang.community.service.UserService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,8 @@ import java.util.UUID;
 
 @Controller
 @Slf4j
+@Data
+@ConfigurationProperties(prefix = "github")
 public class AuthorizeController {
 
     @Autowired
@@ -29,14 +32,9 @@ public class AuthorizeController {
     @Autowired
     private QQProvider qqProvider;
 
-
-
-    @Value("${github.client.id}")
     private String clientId;
-    @Value("${github.client.secret}")
     private String secret;
-    @Value("${github.redirect.uri}")
-    private String redirectUri;
+    private String redirectUrl;
 
     @Autowired
     private UserService userService;
@@ -48,7 +46,7 @@ public class AuthorizeController {
     public String callback(@RequestParam(name="code")String code,
                            @RequestParam(name="state")String state,
                             HttpServletResponse response){
-        setAccessTokenDto(code, state, clientId, secret, redirectUri);
+        setAccessTokenDto(code, state, clientId, secret, redirectUrl);
         //获取access_token
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         //根据accessToken获取用户信息

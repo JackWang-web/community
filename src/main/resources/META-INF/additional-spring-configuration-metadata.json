@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "ucloud-ufile.region",
+      "type": "java.lang.String",
+      "description": "Description for ucloud-ufile.region."
+  }
+] }

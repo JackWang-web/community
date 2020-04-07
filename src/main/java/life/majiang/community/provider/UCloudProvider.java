@@ -9,7 +9,9 @@ import cn.ucloud.ufile.exception.UfileClientException;
 import cn.ucloud.ufile.exception.UfileServerException;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -17,22 +19,24 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @Service
+@Data
+@ConfigurationProperties(prefix = "ucloud-ufile")
 public class UCloudProvider {
-    @Value("${ucloud.ufile.public-key}")
+    //@Value("${ucloud.ufile.public-key}")
     private String publicKey;
-    @Value("${ucloud.ufile.private-key}")
+    //@Value("${ucloud.ufile.private-key}")
     private String privateKey;
 
-    @Value("${ucloud.ufile.bucket-name}")
+    //@Value("${ucloud.ufile.bucket-name}")
     private String bucketName;
 
-    @Value("${ucloud.ufile.region}")
+    //@Value("${ucloud.ufile.region}")
     private String region;
 
-    @Value("${ucloud.ufile.suffix}")
+    //@Value("${ucloud.ufile.suffix}")
     private String suffix;
 
-    @Value("${ucloud.ufile.expires}")
+    //@Value("${ucloud.ufile.expires}")
     private Integer expires;
 
     //同步上传
